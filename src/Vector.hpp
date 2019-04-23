@@ -8,6 +8,7 @@
 template<class T>
 class Vector
 {
+	typedef size_t size_type;
 	typedef T* iterator;					//普通迭代器
 	typedef const T* const_iterator;		//const迭代器
 	typedef T& reference;					//引用
@@ -19,14 +20,14 @@ public:
 
 	Vector()
 		:_first(nullptr)
-		,_last(nullptr)
-		,_end(nullptr)
+		, _last(nullptr)
+		, _end(nullptr)
 	{}
 
 	Vector(size_t count, const T& value = T())
 		:_first(nullptr)
-		,_last(nullptr)
-		,_end(nullptr)
+		, _last(nullptr)
+		, _end(nullptr)
 	{
 		if (count > 0)
 		{
@@ -51,26 +52,25 @@ public:
 		_end = _first + size;
 	}
 
-	Vector(const Vector<T>& other)
+	Vector(const Vector<T> & other)
 		:Vector(other._first, other._last)
 	{}
 
 	Vector(const std::initializer_list<T> init)
 		:_first(new T[init.size()])
-		,_last(_first)
+		, _last(_first)
 		, _end(_first + init.size())
 	{
-		cout << _first << endl;
 		for (auto e : init)
 		{
 			*(_last++) = e;
 		}
 	}
 
-	Vector(Vector<T>&& other)
+	Vector(Vector<T> && other)
 		:_first(move(other._first))
-		,_last(move(other._last))
-		,_end(move(other._end))
+		, _last(move(other._last))
+		, _end(move(other._end))
 	{
 		other._first = other._last = other._end = nullptr;
 	}
@@ -105,7 +105,7 @@ public:
 	iterator rbegin()
 	{
 		return _last;
-	}  
+	}
 
 	iterator rend()
 	{
@@ -116,7 +116,7 @@ public:
 	{
 		return _first;
 	}
-	
+
 	const_iterator cend() const
 	{
 		return _last;
@@ -134,13 +134,13 @@ public:
 
 	////////////////////////
 	//Element access
-	
+
 	reference operator[](size_t pos)
 	{
 		assert(pos < this.size());
 		return _first[pos];
 	}
-	
+
 	const_reference operator[](size_t pos) const
 	{
 		assert(pos < this.size());
@@ -209,7 +209,7 @@ public:
 				}
 				delete[] _first;
 			}
-			
+
 			_first = temp;
 			_last = _first + count;
 			_end = _first + new_cap;
@@ -229,7 +229,7 @@ public:
 		_last = _first;
 	}
 
-	void resize(size_t count, const T& value = T())
+	void resize(size_t count, const T & value = T())
 	{
 		size_t oldSize = size();
 		if (count <= oldSize())
@@ -250,7 +250,7 @@ public:
 		}
 	}
 
-	void swap(Vector& other)
+	void swap(Vector & other)
 	{
 		T* temp = nullptr;
 		temp = this._first;
@@ -267,7 +267,7 @@ public:
 
 	}
 
-	void push_back(const T& value)
+	void push_back(const T & value)
 	{
 		if (size() == capacity())
 		{
@@ -284,13 +284,53 @@ public:
 		}
 	}
 
-	iterator erase(iterator pos);
+	iterator erase(iterator pos)
+	{
+		if (pos + 1 != _last)
+		{
+			for (iterator it = pos + 1; it != _last; ++it)
+			{
+				*(it - 1) = *it;
+			}
+		}
+		pop_back();
+		return pos;
+	}
+
+	//iterator erase(const_iterator pos);
+
+	iterator erase(iterator first, iterator last)
+	{
+		if (last != _last)
+		{
+			while (last < _last)
+			{
+				*(first++) = *(last++);
+			}
+		}
+		_last = first;
+		return first;
+	}
+
+	//iterator erase(const_iterator first, const_iterator last);
+
+	iterator insert(iterator pos, const T & value);
 	
-	iterator erase(const_iterator pos);
+	//iterator insert(const_iterator pos, const T & value);
 	
-	iterator erase(iterator first, iterator last);
+	//iterator insert(const_iterator pos, T && value);
 	
-	iterator erase(const_iterator first, const_iterator last);
+	void insert(iterator pos, size_type count, const T & value);
+	
+	//iterator insert(const_iterator pos, size_type count, const T & value);
+	
+	template< class InputIt >
+	void insert(iterator pos, InputIt first, InputIt last);
+	
+	//template< class InputIt >
+	//iterator insert(const_iterator pos, InputIt first, InputIt last);
+	
+	//iterator insert(const_iterator pos, std::initializer_list<T> ilist);
 
 
 private:
