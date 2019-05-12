@@ -15,19 +15,28 @@ Vector<int> funv()
 
 int main()
 {
-#if 0
+#if 1
 	vector<int> v{ 1, 2, 3, 4, 5 };
-	v.erase(v.cbegin());
-	cout << *(v.begin());
+	cout << v.size() << v.capacity() << endl;
+	v.resize(10);
+	cout << v.size() << v.capacity() << endl;
+	v.reserve(7);
+	cout << v.size() << v.capacity() << endl;
+
 #endif
+	
 
-	//const List<int> l(5, 6);
-	//cout << l.front() << endl;
-	//List<int> l1(2, 3);
-	//cout << l1.front() << endl;
-	//l1.front() = 1;
+#if 0
+	list<int> l1{ 1, 2, 3, 4, 5 };
+	/*for (auto e : l1)
+	{
+		cout << e << endl;
+	}*/
+	
+	l1.resize(15);
+	cout << l1.size() << " " << endl;
 
-	list<int> l{1, 2, 3, 4, 5};
-	cout << l.front() << " " << l.back() << endl;
+
+#endif
 	return 0;
 }
