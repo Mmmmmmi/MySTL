@@ -15,7 +15,7 @@ Vector<int> funv()
 
 int main()
 {
-#if 1
+#if 0
 	vector<int> v{ 1, 2, 3, 4, 5 };
 	cout << v.size() << v.capacity() << endl;
 	v.resize(10);
@@ -26,15 +26,17 @@ int main()
 #endif
 	
 
-#if 0
-	list<int> l1{ 1, 2, 3, 4, 5 };
-	/*for (auto e : l1)
+#if 1
+	List<int> l1{ 1, 2, 3, 4, 5 };
+	for (auto e : l1)
 	{
 		cout << e << endl;
-	}*/
-	
-	l1.resize(15);
-	cout << l1.size() << " " << endl;
+	}
+
+	for (auto e = l1.crbegin(); e != l1.crend(); ++e)
+	{
+		cout << *e << endl;
+	}
 
 
 #endif

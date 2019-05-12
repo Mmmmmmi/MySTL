@@ -87,6 +87,74 @@ struct List_Iterator
 template<class T, class Ref, class Ptr, class Iterator>
 struct List_Iterator_Reverse
 {
+	typedef List_Node<T> Node;
+	typedef List_Node<T>* PNode;
+	typedef List_Iterator_Reverse<T, Ref, Ptr, Iterator> Self;
+
+	List_Iterator_Reverse(PNode pNode = nullptr)
+		:_it(pNode)
+	{}
+
+	List_Iterator_Reverse(Iterator it)
+		:_it(it)
+	{}
+
+
+	List_Iterator_Reverse(const Self& x)
+		:_it(x._it)
+	{}
+
+	Ref operator*() const
+	{
+		Iterator temp(_it);
+		--temp;
+		return *temp;
+	}
+
+	Ptr operator->() const
+	{
+		return &(operator*());
+	}
+
+
+	Self& operator++()
+	{
+		--_it;
+		return *this;
+	}
+
+
+	Self operator++(int)
+	{
+		Self temp(*this);
+		--_it;
+		return temp;
+	}
+
+	Self& operator--()
+	{
+		++_it;
+		return *this;
+	}
+
+	Self operator--(int)
+	{
+		Self temp(*this);
+		++_it;
+		return temp;
+	}
+
+	bool operator==(const Self& s) const
+	{
+		return this->_it == s._it;
+	}
+
+	bool operator!=(const Self& s) const
+	{
+		return this->_it != s._it;
+	}
+
+	Iterator _it;
 };
 
 template<class T>
@@ -112,7 +180,7 @@ public:
 	template< class InputIt >
 	List(InputIt first, InputIt last);
 
-	List(const List& other);
+	explicit List(const List& other);
 
 	//List(List&& other);
 
@@ -121,6 +189,11 @@ public:
 	/////////////////
 	//Destructor
 	~List();
+
+	////////////////
+
+	List& operator=(const List& other);
+	//list& operator=(std::initializer_list<T> ilist);
 
 	////////////////
 	//Element access
@@ -135,14 +208,14 @@ public:
 	iterator begin();
 	iterator end();
 
-	const_iterator cbegin();
-	const_iterator cend();
+	const_iterator cbegin() const;
+	const_iterator cend() const;
 
 	reverse_iterator rbegin();
 	reverse_iterator rend();
 
-	const_reverse_iterator crbegin();
-	const_reverse_iterator crend();
+	const_reverse_iterator crbegin() const;
+	const_reverse_iterator crend() const;
 
 	////////////////////
 	//Capacity
@@ -228,10 +301,30 @@ List<T>::List(size_type count, const T& value)
 }
 
 template<class T>
+template<class InputIt>
+List<T>::List(InputIt first, InputIt last)
+	:List()
+{
+	while (first != last)
+	{
+		push_back(*first);
+		++first;
+	}
+}
+
+template<class T>
+List<T>::List(const List& other)
+	:List()
+{
+	List<T> temp(other.cbegin(), other.cend());
+	swap(temp._head, this->_head);
+}
+
+template<class T>
 List<T>::List(std::initializer_list<T> init)
 	:List()
 {
-	for (auto e : init)
+	for (const auto& e : init)
 	{
 		push_back(e);
 	}
@@ -247,9 +340,20 @@ List<T>::~List()
 }
 
 template<class T>
+List<T>& List<T>::operator=(const List<T>& other)
+{
+	if (&other != this) 
+	{
+		List<T> temp(other);
+		swap(temp._head, this->_head);
+	}
+	return *this;
+}
+
+template<class T>
 typename List<T>::reference List<T>::front()
 {
-	return const_cast<T&>(static_cast<const List<T>*>(this)->front());
+	return const_cast<T&>(static_cast<const List<T>>(*this).front());
 }
 
 template<class T>
@@ -261,7 +365,7 @@ typename List<T>::const_reference List<T>::front() const
 template<class T>
 typename List<T>::reference List<T>::back()
 {
-	return const_cast<T&>(static_cast<const List<T>*>(this)->back());
+	return const_cast<T&>(static_cast<const List<T>>(*this).back());
 }
 
 template<class T>
@@ -273,40 +377,50 @@ typename List<T>::const_reference List<T>::back() const
 template<class T>
 typename List<T>::iterator List<T>::begin()
 {
-	return _head->_next;
-	//return const_cast<List<T>::iterator>(static_cast<const List<T>*>(this)->begin());
+	return iterator(_head->_next);
 }
 
 template<class T>
 typename List<T>::iterator List<T>::end()
 {
-	return _head;
-	//return const_cast<List<T>::iterator>(static_cast<const List<T>*>(this)->end());
+	return iterator(_head);
 }
 
 template<class T>						
-typename List<T>::const_iterator List<T>::cbegin()
+typename List<T>::const_iterator List<T>::cbegin() const
 {
-	return _head->_next;
+	return const_iterator(_head->_next);
 }
 
 template<class T>
-typename List<T>::const_iterator List<T>::cend()
+typename List<T>::const_iterator List<T>::cend() const
 {
-	return _head;
+	return const_iterator(_head);
 }
 
 template<class T>
-typename List<T>::reverse_iterator  List<T>::rbegin();
+typename List<T>::reverse_iterator  List<T>::rbegin()
+{
+	return reverse_iterator(end());
+}
 
 template<class T>
-typename List<T>::reverse_iterator  List<T>::rend();
+typename List<T>::reverse_iterator  List<T>::rend()
+{
+	return reverse_iterator(begin());
+}
 
 template<class T>
-typename List<T>::const_reverse_iterator  List<T>::crbegin();
+typename List<T>::const_reverse_iterator  List<T>::crbegin() const
+{
+	return const_reverse_iterator(cend());
+}
 
 template<class T>
-typename List<T>::const_reverse_iterator  List<T>::crend();
+typename List<T>::const_reverse_iterator  List<T>::crend() const
+{
+	return const_reverse_iterator(cbegin());
+}
 
 template<class T>
 bool List<T>::empty() const
@@ -433,7 +547,7 @@ void List<T>::insert(iterator pos, typename InputIt first, typename InputIt last
 template<class T>
 typename List<T>::iterator List<T>::erase(iterator pos)
 {
-	PNode del = pos->_ptr;
+	PNode del = pos._ptr;
 	PNode prev = del->_prev;
 	PNode next = del->_next;
 	prev->_next = next;
