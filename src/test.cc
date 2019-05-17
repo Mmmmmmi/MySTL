@@ -3,8 +3,8 @@
 #include <list>
 using namespace std;
 
-#include "Vector.hpp"
-#include "List.hpp"
+//#include "Vector.hpp"
+//#include "List.hpp"
 
 #if 0
 Vector<int> funv()
@@ -26,7 +26,7 @@ int main()
 #endif
 	
 
-#if 1
+#if 0
 	List<int> l1{ 1, 2, 3, 4, 5 };
 	for (auto e : l1)
 	{

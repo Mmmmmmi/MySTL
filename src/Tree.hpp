@@ -7,7 +7,6 @@ struct Tree_Node
 	typedef Tree_Node<T> Node;
 	typedef Tree_Node<T>* PNode;
 
-
 	T _data;
 	PNode _leftChild;
 	PNode _rightChild;
