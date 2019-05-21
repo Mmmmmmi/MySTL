@@ -77,16 +77,17 @@ public:
 
 
 
+        PNode newNode = new Node(data);
         //L
-        if (data > pParent->_data)
+        if (data < pParent->_data)
         {
-
+            pParent->_leftChild = newNode;
         }
+        //R
         else
         {
-            
+            pParent->_rightChild = newNode;
         }
-
         return true; 
     }
 
