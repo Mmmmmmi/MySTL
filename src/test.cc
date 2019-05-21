@@ -1,10 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <stdlib.h>
 using namespace std;
 
-//#include "Vector.hpp"
-//#include "List.hpp"
+#include "Vector.hpp"
+#include "List.hpp"
+#include "Tree.hpp"
 
 #if 0
 Vector<int> funv()
@@ -38,7 +40,15 @@ int main()
 		cout << *e << endl;
 	}
 
+#endif
+
+
+
+#if 1
+
+	BinarySearchTree<int> bst;
 
 #endif
+
 	return 0;
 }

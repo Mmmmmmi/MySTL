@@ -6,6 +6,14 @@ struct Tree_Node
     typedef Tree_Node<T> Node;
     typedef Tree_Node<T>* PNode;
 
+    Tree_Node(const T& data)
+        :_data(data)
+         ,_leftChild(nullptr)
+         ,_rightChild(nullptr)
+         ,_patent(nullptr)
+    {}
+
+
     T _data;
     PNode _leftChild;
     PNode _rightChild;
@@ -38,7 +46,47 @@ public:
 
     bool Insert(const T& data)
     {
+        if (_head == nullptr)
+        {
+            PNode newNode = new Node(data);
+            _head->_patent = newNode;
+            newNode->_patent = _head;
+            return true;
+        }
         
+        PNode pParent = nullptr;
+        PNode pCur = _head->_patent;
+
+        while(pCur != nullptr)
+        {
+            pParent = pCur;
+            if (data == pCur->_data)
+            {
+                return false;
+            }
+            else if (data > pCur->_data)
+            {
+                pCur = pCur->_leftChild;
+            }
+            else if (data < pCur->_data)
+            {
+                pCur = pCur->_rightChild;
+            }
+        }
+
+
+
+
+        //L
+        if (data > pParent->_data)
+        {
+
+        }
+        else
+        {
+            
+        }
+
         return true; 
     }
 
@@ -54,7 +102,6 @@ public:
 
 
 
-
 private:
     void _Destroy(PNode root)
     {
@@ -63,8 +110,12 @@ private:
             _Destroy(root->_leftChild);
             _Destroy(root->_rightChild);
             delete root;
-
         }
+    }
+
+    PNode _Search()
+    {
+
     }
 
     PNode _head;
