@@ -91,19 +91,43 @@ public:
 
     bool Erase(const T& data)
     {
+        //tree empty
         if (_head->_patent == nullptr)
         {
             return false;
         }
-        while()
+        
+        //1. find
+        PNode parent = nullptr;
+        PNode cur = _head->_patent;
+        while(cur != nullptr)
         {
-
+            parent = cur;
+            if (data == cur->_data)
+            {
+                break;
+            }
+            else if (data > cur->_data)
+            {
+                cur = cur->_rightChild;
+            }
+            else if (data < cur->_data)
+            {
+                cur = cur->_leftChild;
+            }
         }
+        if (cur == nullptr)
+        {
+           std::cout << "data not find!" <<std::endl;
+           return false; 
+        }
+        //TODO
+        //2. erase
     }
 
     PNode Find(const T& data)
     {
-
+        return _Find(_head->_patent, data);
     }
 
     void InOrder()
@@ -125,6 +149,25 @@ private:
         _InOrder(root->_rightChild);
     }
 
+    PNode _Find(const PNode& root, const T& data)
+    {
+        if(root == nullptr)
+        {
+            return nullptr;
+        }
+        if (data < root->_data)
+        {
+            return _Find(root->_leftChild, data);
+        }
+        else if(data > root->_data)
+        {
+            return _Find(root->_rightChild, data);
+        }
+        else if (data == root->_data)
+        {
+            return root;
+        }
+    }
 
     void _Destroy(PNode root)
     {
