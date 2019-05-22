@@ -4,8 +4,8 @@
 #include <stdlib.h>
 using namespace std;
 
-#include "Vector.hpp"
-#include "List.hpp"
+//#include "Vector.hpp"
+//#include "List.hpp"
 #include "Tree.hpp"
 
 #if 0

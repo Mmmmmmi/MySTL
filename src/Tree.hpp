@@ -1,12 +1,12 @@
 #pragma once
 
 template<class T>
-struct Tree_Node
+struct BSTree_Node
 {
-    typedef Tree_Node<T> Node;
-    typedef Tree_Node<T>* PNode;
+    typedef BSTree_Node<T> Node;
+    typedef BSTree_Node<T>* PNode;
 
-    Tree_Node(const T& data)
+    BSTree_Node(const T& data)
         :_data(data)
          ,_leftChild(nullptr)
          ,_rightChild(nullptr)
@@ -24,8 +24,8 @@ struct Tree_Node
 template<class T>
 class BinarySearchTree 
 {
-    typedef Tree_Node<T> Node;
-    typedef Tree_Node<T>* PNode;
+    typedef BSTree_Node<T> Node;
+    typedef BSTree_Node<T>* PNode;
     typedef T& reference;
     typedef BinarySearchTree<T> Self;
 public:
@@ -75,8 +75,6 @@ public:
         }
 
 
-
-
         PNode newNode = new Node(data);
         //L
         if (data < pParent->_data)
@@ -93,7 +91,14 @@ public:
 
     bool Erase(const T& data)
     {
+        if (_head->_patent == nullptr)
+        {
+            return false;
+        }
+        while()
+        {
 
+        }
     }
 
     PNode Find(const T& data)
@@ -101,9 +106,26 @@ public:
 
     }
 
-
+    void InOrder()
+    {
+        _InOrder(_head->_patent);
+        cout << endl;
+    }
 
 private:
+
+    void _InOrder(PNode root)
+    {
+        if (root == nullptr)
+        {
+            return;
+        }
+        _InOrder(root->_leftChild);
+        cout << root->_data <<" ";
+        _InOrder(root->_rightChild);
+    }
+
+
     void _Destroy(PNode root)
     {
         if (root != nullptr)
@@ -114,14 +136,10 @@ private:
         }
     }
 
-    PNode _Search()
-    {
-
-    }
-
     PNode _head;
 };
 
+/*
 template<class T>
 class AVLTree
 {
@@ -143,3 +161,4 @@ public:
 private:
     PNode _head;
 };
+*/

@@ -1,2 +1,2 @@
 test:test.cc
-	gcc $^ -o $@
+	g++ $^ -o $@
