@@ -32,7 +32,7 @@ class BinarySearchTree
     typedef BinarySearchTree<T> Self;
 public:
     BinarySearchTree()
-        :_head(nullptr)
+        :_head(new Node(0))
     {}
 
     void Destroy()
@@ -48,14 +48,16 @@ public:
 
     bool Insert(const T& data)
     {
-        if (_head == nullptr)
+        //tree empty
+        if (_head->_patent == nullptr)
         {
             PNode newNode = new Node(data);
             _head->_patent = newNode;
             newNode->_patent = _head;
             return true;
         }
-        
+
+        //
         PNode pParent = nullptr;
         PNode pCur = _head->_patent;
 
@@ -66,17 +68,15 @@ public:
             {
                 return false;
             }
-            else if (data > pCur->_data)
+            else if (data < pCur->_data)
             {
                 pCur = pCur->_leftChild;
             }
-            else if (data < pCur->_data)
+            else if (data > pCur->_data)
             {
                 pCur = pCur->_rightChild;
             }
         }
-
-
         PNode newNode = new Node(data);
         //L
         if (data < pParent->_data)
@@ -98,33 +98,113 @@ public:
         {
             return false;
         }
-        
+
         //1. find
-        PNode parent = nullptr;
-        PNode cur = _head->_patent;
-        while(cur != nullptr)
+        PNode pParent = nullptr;
+        PNode pCur = _head->_patent;
+        while(pCur != nullptr)
         {
-            parent = cur;
-            if (data == cur->_data)
+            if (data < pCur->_data)
             {
-                break;
+                pParent = pCur;
+                pCur = pCur->_leftChild;
             }
-            else if (data > cur->_data)
+            else if (data > pCur->_data)
             {
-                cur = cur->_rightChild;
+                pParent = pCur;
+                pCur = pCur->_rightChild;
             }
-            else if (data < cur->_data)
+            else if (data == pCur->_data)
             {
-                cur = cur->_leftChild;
+                //2. erase
+                if (pCur->_leftChild == nullptr && pCur->_rightChild == nullptr)
+                {
+                    //leftChild == nullptr && rightChild == nullptr 
+                    if (_head->_patent == pCur)
+                    {
+                        //erase root
+                        _head->_patent = nullptr;
+                        delete pCur;
+                        return true;
+                    }
+                    if (data < pParent->_data)
+                    {
+                        pParent->_leftChild = nullptr; 
+                    }
+                    else if (data > pParent->_data)
+                    {
+                        pParent->_rightChild = nullptr;
+                    }
+                    return true;
+                }
+                else if (pCur->_leftChild == nullptr && pCur->_rightChild != nullptr)
+                {
+                    //leftChild == nullptr && rightChild != nullptr 
+                    if (_head->_patent == pCur)
+                    {
+                        _head->_patent = pCur->_rightChild;
+                        delete pCur;
+                        return true;
+                    }
+                    if (data < pParent->_data)
+                    {
+                        pParent->_leftChild = pCur->_rightChild;
+                    }
+                    else if (data > pParent->_data)
+                    {
+                        pParent->_rightChild = pCur->_rightChild;
+                    }
+                    delete pCur;
+                    return true;
+                }
+                else if (pCur->_leftChild != nullptr && pCur->_rightChild == nullptr)
+                {
+                    //leftChild != nullptr && rightChild == nullptr 
+                    if (_head->_patent == pCur)
+                    {
+                        _head->_patent = pCur->_leftChild;
+                        delete pCur;
+                        return true;
+                    }
+                    if (data < pParent->_data)
+                    {
+                        pParent->_leftChild = pCur->_leftChild;
+                    }
+                    else if (data > pParent->_data)
+                    {
+                        pParent->_rightChild = pCur->_leftChild;
+                    }
+                    delete pCur;
+                    return true;
+                }
+                else
+                {
+                    //leftChild != nullptr && rightChild != nullptr
+                    PNode delParent = nullptr;
+                    PNode del = pCur->_leftChild;
+                    while(del->_rightChild != nullptr)
+                    {
+                        delParent = del;
+                        del = del->_rightChild;
+                    }
+                    if (delParent == nullptr)
+                    {
+                        //del == pCur->_leftChild && del->_rightChild == nullptr;
+                        pCur->_leftChild = del->_leftChild;
+                    }
+                    else 
+                    {
+                        delParent->_rightChild = del->_leftChild;
+                    }
+                    std::swap(pCur->_data, del->_data);
+                    delete del;
+                    return true;
+                }
             }
         }
-        if (cur == nullptr)
-        {
-           std::cout << "data not find!" <<std::endl;
-           return false; 
-        }
-        //TODO
-        //2. erase
+        // pCur == nullptr
+        std::cout << "data not find!" <<std::endl;
+        return false; 
     }
 
     PNode Find(const T& data)
@@ -184,7 +264,33 @@ private:
     PNode _head;
 };
 
-/*
+
+template<class K, class V>
+struct AVLTree_Node
+{
+    typedef AVLTree_Node<K, V> Node;
+    typedef AVLTree_Node<K, V>* PNode;
+
+    AVLTree_Node(const K& key, const V& value)
+        :_data(key, value)
+         ,_bf(0)
+         ,_leftChild(nullptr)
+         ,_rightChild(nullptr)
+         ,_patent(nullptr)
+    {}
+
+    
+    pair<K, V> _data;
+    int _bf;
+    PNode _leftChild;
+    PNode _rightChild;
+    PNode _patent;
+
+};
+
+
+
+
 template<class T>
 class AVLTree
 {
@@ -206,4 +312,3 @@ public:
 private:
     PNode _head;
 };
-*/
