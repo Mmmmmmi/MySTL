@@ -49,6 +49,8 @@ int main()
 	BinarySearchTree<int> bst;
     bst.Insert(8);
     bst.Insert(1);
+    bst.Insert(9);
+    bst.Insert(10);
     bst.Insert(2);
     bst.Insert(6);
     bst.Insert(3);
@@ -56,6 +58,21 @@ int main()
     bst.Insert(5);
     bst.Insert(4);
     bst.Insert(5);
+    bst.InOrder();
+    bst.Erase(1);
+    bst.Erase(6);
+    bst.Erase(4);
+    bst.Erase(8);
+    bst.Erase(2);
+    bst.Erase(3);
+    bst.Erase(5);
+    bst.Erase(9);
+    bst.Erase(10);
+    bst.Insert(9);
+    bst.Insert(10);
+    bst.Insert(2);
+    bst.Insert(6);
+    bst.Insert(3);
     bst.InOrder();
 
 #endif
