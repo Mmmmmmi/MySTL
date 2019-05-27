@@ -8,7 +8,7 @@ struct BSTree_Node
     typedef BSTree_Node<T> Node;
     typedef BSTree_Node<T>* PNode;
 
-    BSTree_Node(const T& data)
+    BSTree_Node(const T& data = T())
         :_data(data)
          ,_leftChild(nullptr)
          ,_rightChild(nullptr)
@@ -32,7 +32,7 @@ class BinarySearchTree
     typedef BinarySearchTree<T> Self;
 public:
     BinarySearchTree()
-        :_head(new Node(0))
+        :_head(new Node())
     {}
 
     void Destroy()
@@ -285,18 +285,26 @@ struct AVLTree_Node
     PNode _leftChild;
     PNode _rightChild;
     PNode _patent;
-
 };
 
 
+/*
 
-
-template<class T>
+template<class K, class V>
 class AVLTree
 {
-    typedef Tree_Node<T> Node;
-    typedef Tree_Node<T>* PNode;
+    typedef AVLTree_Node<K, V> Node;
+    typedef AVLTree_Node<K, V>* PNode;
 public:
+    AVLTree(const K& key = K(), const V& value = V())
+        :_head(new Node(key, value))
+    {}
+
+    bool Insert()
+    {
+
+    }
+
 
 private:
     PNode _head;
@@ -311,4 +319,4 @@ public:
 
 private:
     PNode _head;
-};
+};*/
