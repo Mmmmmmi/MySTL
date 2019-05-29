@@ -32,7 +32,7 @@ class BinarySearchTree
     typedef BinarySearchTree<T> Self;
 public:
     BinarySearchTree()
-        :_head(new Node())
+        :_head(nullptr)
     {}
 
     void Destroy()
@@ -48,19 +48,14 @@ public:
 
     bool Insert(const T& data)
     {
-        //tree empty
-        if (_head->_patent == nullptr)
+        if (_head == nullptr)
         {
-            PNode newNode = new Node(data);
-            _head->_patent = newNode;
-            newNode->_patent = _head;
-            return true;
+            PNode newNode = new Node();
+            _head = newNode;
         }
 
-        //
         PNode pParent = nullptr;
         PNode pCur = _head->_patent;
-
         while(pCur != nullptr)
         {
             pParent = pCur;
@@ -78,6 +73,19 @@ public:
             }
         }
         PNode newNode = new Node(data);
+
+        if (pParent == nullptr)
+        {
+            //empty tree
+            _head->_patent = newNode; 
+            newNode->_patent = _head;
+            return true;
+        }
+        else
+        {
+            newNode->_patent = pParent;
+        }
+
         //L
         if (data < pParent->_data)
         {
@@ -94,7 +102,7 @@ public:
     bool Erase(const T& data)
     {
         //tree empty
-        if (_head->_patent == nullptr)
+        if (_head == nullptr || _head->_patent == nullptr)
         {
             return false;
         }
@@ -191,10 +199,18 @@ public:
                     {
                         //del == pCur->_leftChild && del->_rightChild == nullptr;
                         pCur->_leftChild = del->_leftChild;
+						if (del->_leftChild)
+						{
+							del->_leftChild->_patent = pCur;
+						}
                     }
                     else 
                     {
                         delParent->_rightChild = del->_leftChild;
+						if (del->_leftChild)
+						{
+							del->_leftChild->_patent = delParent;
+						}
                     }
                     std::swap(pCur->_data, del->_data);
                     delete del;
@@ -295,19 +311,21 @@ class AVLTree
     typedef AVLTree_Node<K, V> Node;
     typedef AVLTree_Node<K, V>* PNode;
 public:
-    AVLTree(const K& key = K(), const V& value = V())
-        :_head(new Node(key, value))
+    AVLTree()
+        :_head(nullptr)
     {}
 
-    bool Insert()
+    bool Insert(pair<K, V>& data)
     {
+		if (_head == nullptr)
+		{
 
+		}
     }
-
 
 private:
     PNode _head;
-};
+}
 
 template<class T>
 class RedBlackTree
