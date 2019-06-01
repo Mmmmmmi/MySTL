@@ -303,8 +303,6 @@ struct AVLTree_Node
     PNode _patent;
 };
 
-
-
 template<class K, class V>
 class AVLTree
 {
