@@ -50,8 +50,7 @@ public:
     {
         if (_head == nullptr)
         {
-            PNode newNode = new Node();
-            _head = newNode;
+            _head = new Node();
         }
 
         PNode pParent = nullptr;
@@ -287,7 +286,7 @@ struct AVLTree_Node
     typedef AVLTree_Node<K, V> Node;
     typedef AVLTree_Node<K, V>* PNode;
 
-    AVLTree_Node(const K& key, const V& value)
+    AVLTree_Node(const K& key = K(), const V& value = V())
         :_data(key, value)
          ,_bf(0)
          ,_leftChild(nullptr)
@@ -317,14 +316,15 @@ public:
     {
 		if (_head == nullptr)
 		{
-
+            _head = new AVLTree_Node(data.first, data.second);
 		}
     }
 
 private:
     PNode _head;
-}
+};
 
+/*
 template<class T>
 class RedBlackTree
 {
@@ -334,4 +334,4 @@ public:
 
 private:
     PNode _head;
-};
+};*/
