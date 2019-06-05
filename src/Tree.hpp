@@ -294,7 +294,6 @@ struct AVLTree_Node
          ,_patent(nullptr)
     {}
 
-    
     pair<K, V> _data;
     int _bf;
     PNode _leftChild;
